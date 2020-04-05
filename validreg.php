@@ -89,7 +89,9 @@
 
 		     if($query_run)
 		     {
-			echo ' <script type="text/javascript"> alert("Registered succesfully.") </script> ';
+			
+       // header("location:login.html");
+       echo ' <script type="text/javascript"> alert("Registered succesfully.") </script> ';
 		     }
 		     else
 		     {
@@ -100,15 +102,15 @@
 		}
 }
 ?>
-<html>
+<!-- <html>
 <body>
 
 
         <table align="center">
        
 	<tr>
-          <td> <form action="index.html"> <h2 align="center"> <input type="submit" value=" Redirect to Home Page"> </h2> </form> </td>
+          <td> <form action="trial.html"> <h2 align="center"> <input type="submit" value="Redirect to Home Page"></h2></form></td>
     	</tr>
 	</table>
 </body>
-</html>
+</html> -->
