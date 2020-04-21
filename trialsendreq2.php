@@ -1,3 +1,81 @@
+<?php
+ if(isset($_POST["submit"]))
+ {
+  $fname=$_POST["fname"];
+  $email= $_POST["email"];
+  $mobile=$_POST["mobile"];
+  $bloodgrp=$_POST["bloodgrp"];
+  $datee=$_POST["datee"];
+
+  $secretKey="6LdkhOgUAAAAAHxEHfVSmqex6SMi3V6OBjdWyUMo";
+  $responseKey=$_POST['g-recaptcha-response'];
+  $userIP=$_SERVER['REMOTE_ADDR'];
+
+  $url="https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$responseKey&remoteip=$userIP";
+  $response=file_get_contents($url);
+  $response=json_decode($response);
+		 if($response->success)
+		  {
+		  		$servername="localhost";
+    $user="root";
+    $pass="root";
+    
+      if (!preg_match("/^[a-zA-Z\s]+$/", $fname))
+       {
+        echo ' <script type="text/javascript"> alert("Name should be string ") </script> ';
+       }
+       
+       elseif (!preg_match('/^[0-9]*$/',$mobile)) 
+       {
+        echo ' <script type="text/javascript"> alert("Mobile number should  contain numerical  digits only.") </script> ';
+       }
+       elseif (strlen($mobile)<10)
+        {
+        echo ' <script type="text/javascript"> alert("Please enter a valid mobile number.") </script> ';
+       }
+       elseif (strlen($mobile)>10)
+        {
+        echo ' <script type="text/javascript"> alert("Your mobile  number is too large.Please enter a valid number.") </script> ';
+       }
+
+
+      else
+      {
+    $conn= mysqli_connect($servername, $user,$pass);
+    $db=mysqli_select_db($conn,'bdms');
+
+    $query="INSERT INTO request2 (Fullname,Email,Mobile,Bloodtype,Date1) VALUES ('$fname','$email','$mobile','$bloodgrp','$datee')";
+    $query_run=mysqli_query($conn,$query);
+
+    if($conn->connect_error)
+    {
+      die("Unsuccessful Connection");
+      exit(0);
+    }
+    else
+    {
+     
+
+         if($query_run)
+         {
+      echo ' <script type="text/javascript"> alert("Request Sent.") </script> ';
+         }
+         else
+         {
+      echo ' <script type="text/javascript"> alert(" Failed to send request. ") </script> ';
+      exit(0);
+         }
+    }
+    }
+		  }
+      
+else
+{
+	 echo ' <script type="text/javascript"> alert(" Verification Failed.") </script> ';
+}
+    
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -131,14 +209,13 @@ tr{
 				</div>
 				<div class="collapse navbar-collapse" id="micon">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="homeafter.html">Home</a></li>
-					<li><a href="trialdonors2.php">Donors</a></li>
+					<li><a href="trial.html">Home</a></li>
+					<li><a href="trialdonors.php">Donors</a></li>
 					<li><a href="#">Send Request</a></li>
-					<li><a href="trialviewreq2.php">View Request</a></li>
+					<li><a href="trialviewreq.php">View Request</a></li>
 					<li><a href="update.php">New Donation</a></li>
 					<li><a href="settings.php">Change Password</a></li>
 					<li><a href="trial.html">Logout</a></li>
-
 					
 				</ul>
 			</div>
@@ -179,7 +256,7 @@ tr{
 </tr>
 <tr>
 <td></td>
-<td></td>
+<td><div class="g-recaptcha" data-sitekey="6LdkhOgUAAAAABIgjKBQjC-RaJkGJ2-nXTOG7XlW"></div></td>
 </tr>
 <tr>
 <td></td>
@@ -189,71 +266,10 @@ tr{
 
 </div>
 </form>
+ <script src="https://www.google.com/recaptcha/api.js"></script>
 	</header>
 </div>
-<?php
- if(isset($_POST["submit"]))
- {
-  $fname=$_POST["fname"];
-  $email= $_POST["email"];
-  $mobile=$_POST["mobile"];
-  $bloodgrp=$_POST["bloodgrp"];
-  $datee=$_POST["datee"];
-      
 
-    $servername="localhost";
-    $user="root";
-    $pass="root";
-    
-      if (!preg_match("/^[a-zA-Z\s]+$/", $fname))
-       {
-        echo ' <script type="text/javascript"> alert("Name should be string ") </script> ';
-       }
-       
-       elseif (!preg_match('/^[0-9]*$/',$mobile)) 
-       {
-        echo ' <script type="text/javascript"> alert("Mobile number should  contain numerical  digits only.") </script> ';
-       }
-       elseif (strlen($mobile)<10)
-        {
-        echo ' <script type="text/javascript"> alert("Please enter a valid mobile number.") </script> ';
-       }
-       elseif (strlen($mobile)>10)
-        {
-        echo ' <script type="text/javascript"> alert("Your mobile  number is too large.Please enter a valid number.") </script> ';
-       }
-
-
-      else
-      {
-    $conn= mysqli_connect($servername, $user,$pass);
-    $db=mysqli_select_db($conn,'bdms');
-
-    $query="INSERT INTO request2 (Fullname,Email,Mobile,Bloodtype,Date1) VALUES ('$fname','$email','$mobile','$bloodgrp','$datee')";
-    $query_run=mysqli_query($conn,$query);
-
-    if($conn->connect_error)
-    {
-      die("Unsuccessful Connection");
-      exit(0);
-    }
-    else
-    {
-     
-
-         if($query_run)
-         {
-      echo ' <script type="text/javascript"> alert("Request Sent.") </script> ';
-         }
-         else
-         {
-      echo ' <script type="text/javascript"> alert(" Try Again:(") </script> ';
-      exit(0);
-         }
-    }
-    }
-}
-?>
 </body>
 </html>
 

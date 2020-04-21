@@ -167,6 +167,7 @@ table,th,td{
 			<label>Select Location:</label>
 	
 			<select name="location">
+			<option value="All">All</option>
 			<option value="Warangal">Warangal</option>
 			<option value="Karimnagar">Karimnagar</option>
 			<option value="Khammam">Khammam</option>
@@ -174,6 +175,7 @@ table,th,td{
 			<br>
 			<label id="top">Select Bloodtype:</label>
 			<select name="bloodgrp">
+			<option value="All">All</option>
 			<option value="A+">A+</option>
 			<option value="A-">A-</option>
 			<option value="B+">B+</option>
@@ -188,14 +190,7 @@ table,th,td{
 			<td><input type="submit" name="submit" id="sub" value="See List" />
 
 		</div>
-<div class="table-responsive">
-<table class="table">
-	<th>Name</th>
-	<th>Email</th>
-	<th>Mobile No</th>
-	<th>Last Donated</th>
-	<th>No of units donated</th>
-	<th>Bloodtye</th>
+
 </form>
 <?php
 	$servername="localhost";
@@ -209,12 +204,37 @@ table,th,td{
 	{
 		$location=$_POST["location"];
 		$bloodgrp=$_POST["bloodgrp"];
-		$sql="select Username,Email,Mobile,Lastdate,Units,Bloodtype from register where Location='".$location."' and Bloodtype='".$bloodgrp."'order by Lastdate ASC";
+		if($bloodgrp == 'All' && $location == 'All')
+		{
+			$sql="select * from register order by Lastdate ASC";
+		}
+		elseif ($location=='All') {
+		$sql="select Username,Email,Mobile,Lastdate,Units,Bloodtype,Location from register where  Bloodtype='".$bloodgrp."'order by Lastdate ASC";
 
+		}
+		elseif ($bloodgrp == 'All') {
+			$sql="select Username,Email,Mobile,Lastdate,Units,Bloodtype,Location from register where Location='".$location."' order by Lastdate ASC";
+
+		}
+		else
+		{
+		$sql="select Username,Email,Mobile,Lastdate,Units,Bloodtype,Location from register where Location='".$location."' and Bloodtype='".$bloodgrp."'order by Lastdate ASC";
+		}
 		$result=$conn->query($sql);
 
 		if($result->num_rows>0)
 		{ 
+			?>
+			<div class="table-responsive">
+	<table class="table">
+	<th>Name</th>
+	<th>Email</th>
+	<th>Mobile No</th>
+	<th>Last Donated</th>
+	<th>No of units donated</th>
+	<th>Bloodtye</th>
+	<th>Location</th>
+	<?php
 			
 			while($row=$result->fetch_assoc())
 			{
@@ -226,6 +246,7 @@ table,th,td{
 				<td>  <?php echo $row["Lastdate"] ?> </td>
 				<td>  <?php echo $row["Units"] ?> </td>
 				<td>  <?php echo $row["Bloodtype"] ?> </td>
+				<td>  <?php echo $row["Location"] ?> </td>
 				
 				</tr>
 
@@ -238,7 +259,7 @@ table,th,td{
 			?>
 			</table><br><br><br>
 			<?php 
-			echo '<h3 align=center style=font-size:150%;color:white;font-family:Arial;>No Results<br></h3>';
+			echo '<h3 align=center style=font-size:200%;color:white;font-family:Arial;>No Results<br></h3>';
 		}
 	}
 	

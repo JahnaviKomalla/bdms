@@ -158,31 +158,26 @@ tr{
 		<div class="container">
 		<center>
 			<form  action="" method="post">
-<div id="one">
+	<div id="one">
 	<label>Select Bloodtype:</label>
 	<select name="bloodgrp">
+		<option value="All">All</option>
 	<option value="A+">A+</option>
-<option value="A-">A-</option>
-<option value="B+">B+</option>
-<option value="B-">B-</option>
-<option value="AB+">AB+</option>
-<option value="AB-">AB-</option>
-<option value="O+">O+</option>
-<option value="O-">O-</option>
-</select><br><br>
+	<option value="A-">A-</option>
+	<option value="B+">B+</option>
+	<option value="B-">B-</option>
+	<option value="AB+">AB+</option>
+	<option value="AB-">AB-</option>
+	<option value="O+">O+</option>
+	<option value="O-">O-</option>
+	</select><br><br>
 <input type="submit" name="submit" id="sub" value="See Requests" />
 </div>
-<div class="table-responsive">
-<table class="table">
-	<th>Name</th>
-	<th>Email</th>
-	<th>Mobile No</th>
-	<th>Bloodtype</th>
-	<th>Needed Before </th>
+
 </form>
 
-	</header>
-</div>
+	
+
 <?php
 	$servername="localhost";
 	$user="root";
@@ -194,12 +189,27 @@ tr{
 	if(isset($_POST["submit"]))
 	{
 		$bloodgrp=$_POST["bloodgrp"];
+		if($bloodgrp=='All')
+		{
+			$sql="select * from request2  order by Date1 ASC";
+		}
+		else
+		{
 		$sql="select * from request2 where Bloodtype='".$bloodgrp."' order by Date1 ASC";
-
+		}
 		$result=$conn->query($sql);
 
 		if($result->num_rows>0)
 		{ 
+			?>
+			<div class="table-responsive">
+<table class="table">
+	<th>Name</th>
+	<th>Email</th>
+	<th>Mobile No</th>
+	<th>Bloodtype</th>
+	<th>Needed Before </th></div>
+	<?php
 			
 			while($row=$result->fetch_assoc())
 			{
